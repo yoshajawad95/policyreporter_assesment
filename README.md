@@ -3,7 +3,6 @@
 - **Pluggable Architecture**: Easy to extend with new parsers and extractors
 - **Multiple File Formats**: PDF and Word Document (.docx) support
 - **Field-Specific Strategies**: LLM-based and regex-based extraction
-- **Production Ready**: Comprehensive error handling, logging, and testing
 
 ## Requirements
 
