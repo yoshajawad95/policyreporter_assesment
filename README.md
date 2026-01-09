@@ -3,7 +3,6 @@
 - **Pluggable Architecture**: Easy to extend with new parsers and extractors
 - **Multiple File Formats**: PDF and Word Document (.docx) support
 - **Field-Specific Strategies**: LLM-based and regex-based extraction
-- **Production Ready**: Comprehensive error handling, logging, and testing
 
 ## Requirements
 
@@ -32,9 +31,11 @@
 
 ### Command Line Usage
 ```bash
-# Edit run_parser.py to set your input and output paths
+# Run the parser and enter file path when prompted
 python run_parser.py
 ```
+
+The script will prompt you to enter the resume file path.
 
 ### Programmatic Usage
 ```python
@@ -93,8 +94,8 @@ print(result.to_json())
 
 ## Usage
 
-Simply update the file paths in `run_parser.py` and run:
-```python
+Run the script and enter your file path when prompted:
+```bash
 python run_parser.py
 ```
 

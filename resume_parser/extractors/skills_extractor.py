@@ -2,8 +2,11 @@
 
 import os
 import json
+import logging
 from typing import List
 import google.generativeai as genai
+
+logger = logging.getLogger(__name__)
 
 
 class SkillsExtractor:
@@ -57,20 +60,25 @@ Resume text:
     def __init__(self):
         api_key = os.getenv("GEMINI_API_KEY")
         if not api_key:
+            logger.error("GEMINI_API_KEY not found in environment")
             raise ValueError("GEMINI_API_KEY not found in environment")
         
+        logger.debug("Configuring Gemini API for skills extraction")
         genai.configure(api_key=api_key)
         self.model = genai.GenerativeModel(os.getenv("GEMINI_MODEL_NAME", "gemini-pro"))
     
     def extract(self, text: str) -> List[str]:
         if not text:
+            logger.warning("Empty text provided to skills extractor")
             return []
             
         try:
             prompt = self.EXTRACTION_PROMPT.format(text=text[:6000])
+            logger.debug("Sending skills extraction request to Gemini API")
             response = self.model.generate_content(prompt)
             
             if not response or not response.text:
+                logger.warning("Empty response from Gemini API for skills extraction")
                 return []
             
             # Clean response
@@ -94,9 +102,18 @@ Resume text:
                                 len(cleaned_skill) < 50):
                                 cleaned_skills.append(cleaned_skill)
                     
+                    logger.info(f"Successfully extracted {len(cleaned_skills)} skills")
                     return sorted(cleaned_skills)
+                else:
+                    logger.warning("Skills data is not a list in API response")
+            else:
+                logger.warning("Missing 'skills' key in API response")
             
             return []
             
-        except Exception:
+        except json.JSONDecodeError as e:
+            logger.error(f"Failed to parse JSON response from Gemini API: {e}")
+            return []
+        except Exception as e:
+            logger.error(f"Skills extraction failed: {e}")
             return []

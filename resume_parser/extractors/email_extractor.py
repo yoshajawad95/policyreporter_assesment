@@ -10,8 +10,8 @@ class EmailExtractor:
         if not text:
             return ""
         
-        # Simple email pattern
-        email_pattern = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
-        matches = re.findall(email_pattern, text)
+        # Email pattern that supports Unicode characters
+        email_pattern = r'\b[\w._%+-]+@[\w.-]+\.[A-Za-z]{2,}\b'
+        matches = re.findall(email_pattern, text, re.UNICODE)
         
         return matches[0] if matches else ""
